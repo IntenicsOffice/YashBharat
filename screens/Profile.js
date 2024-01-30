@@ -5,7 +5,7 @@ import CustomHeader from '../navigation/CustomHeader'
 const Profile = () => {
   return (
     <View>
-      <CustomHeader/>
+      <CustomHeader headerTitle = "CustomHeader"/>
       <Text>Profile</Text>
     </View>
   )

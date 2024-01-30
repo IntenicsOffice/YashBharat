@@ -15,6 +15,7 @@ import {TextInput} from 'react-native-paper';
 import {TextButton, CustomToast} from '../../componets';
 import {loginUser, updateUserDeviceToken} from '../../controllers/LoginController';
 import {useDispatch} from 'react-redux';
+import Icon from 'react-native-vector-icons/FontAwesome5'; // Import FontAwesome 5 from react-native-vector-icons
 import {
   storeData,
   storeObjectData,
