@@ -1,20 +1,36 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { COLORS, icons } from '../constants';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {COLORS, icons} from '../constants';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { useNavigation } from '@react-navigation/native';
 
-const CustomHeader = () => {
+const CustomHeader = ({headerTitle}) => {
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.header}>
-      {/* <Text style={styles.headerText}>{title} Yash Bharat</Text> */}
-      <Image
+    <View>
+      {headerTitle !== 'Home' ? (
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            left: 12,
+            zIndex: 1000,
+            top: 10,
+            padding: 5,
+          }}
+          onPress={() => navigation.goBack()}>
+          <Icon name="chevron-left" size={24} color="black" />
+        </TouchableOpacity>
+      ) : null}
+      <View style={styles.header}>
+        <Image
           source={icons.yb_logo}
           style={{
             height: 60,
             width: 190,
-            // tintColor: COLORS.rose_600,
           }}
         />
-
+      </View>
     </View>
   );
 };
@@ -25,12 +41,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   headerText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  backIcon: {
+    color: COLORS.primary,
+    fontSize: 24,
+    marginRight: 10,
   },
 });
 
