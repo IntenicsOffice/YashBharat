@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {COLORS, icons} from '../constants';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { COLORS, icons } from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 
-const CustomHeader = ({headerTitle}) => {
+const CustomHeader = ({ headerTitle ,categoryStatus}) => {
   const navigation = useNavigation();
 
   return (
@@ -23,13 +23,16 @@ const CustomHeader = ({headerTitle}) => {
         </TouchableOpacity>
       ) : null}
       <View style={styles.header}>
-        <Image
+        {categoryStatus === true ? <Text style={{ fontSize:22, color: COLORS.logo_color }}>{headerTitle}</Text> : <Image
           source={icons.yb_logo}
           style={{
             height: 60,
             width: 190,
           }}
         />
+
+        }
+
       </View>
     </View>
   );

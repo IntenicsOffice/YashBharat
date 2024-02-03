@@ -1,108 +1,87 @@
-import React, {useState,useEffect} from 'react';
-import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
-import {Card, Text} from 'react-native-elements';
+import { View, Text } from 'react-native'
+import React from 'react'
+import {Card, Image} from 'react-native-elements';
 import CustomHeader from '../navigation/CustomHeader';
-import { useNavigation } from '@react-navigation/native';
-import { getNewsByCategory, getNewsByCategoryId, getNewsCategory } from '../controller/NewsController';
-import config from '../config';
+import {getNewsByCategory, getNewsCategory} from '../controllers/NewsController';
 
-const Epaper = ({route}) => {
-  const navigation = useNavigation();
-  const {categoryId} = route.params;
-  console.log("categoryId",categoryId)
-  const [dataNews, setDataNews] = useState([]);
- 
-  
 
-  
+const Epaper = () => {
 
-  const fetchNewsByCategory = async(id) => {
-    const response = await getNewsByCategoryId(id)
-    if (response?.status === 200) {
-        setDataNews(response.news)
-    } else {
-      alert(response.message);
-    }
-  };
-  
-  useEffect(() => {
-    // fetchCategory()
-    fetchNewsByCategory(categoryId)
-  }, []);
+    const [newsCategory, setNewsCategory] = useState([]);
 
-  const renderNewsByCategory = () => {
-    return (
-      <ScrollView >
-        <View style={styles.newsContainer}>
-          {dataNews.map((news,index) => (
-             <TouchableOpacity key={index} onPress={() => {
+    const fetchCategory = async () => {
+        const responseTwo = await getNewsByCategory();
+        if (responseTwo?.status === 200) {
+            setNewsCategory(responseTwo.latest_news);
+        } else {
+            alert(responseTwo.message);
+        }
+    };
+
+    useEffect(() => {
+        fetchCategory();
+    }, []);
+
+    const PeparCard = ({title, description, fullDescription, image}) => (
+        <TouchableOpacity
+            onPress={() => {
                 navigation.navigate('DetailNews', {
-                  title: news.post_title,
-                  fullDescription: news.post_body,
-                  imageUrl: news.file_name,
+                    title: title,
+                    fullDescription: fullDescription,
+                    description: description,
+                    imageUrl: image,
                 });
-              }}>
-            <Card key={news.id} containerStyle={styles.cardContainer}>
-              <Card.Title>{news.post_title}</Card.Title>
-              <Card.Image source={{uri: `${config.IMAGE_URL}${news.file_name}`}} style={styles.cardImage} />
-              <Text style={styles.cardDescription}>
-                {news.post_description}
-              </Text>
+            }}>
+            <Card containerStyle={styles.card}>
+            <Text style={{fontFamily: 'Roboto-Light'}}>{title}</Text>
+            <Card.Divider />
+            <View
+                style={{
+                    flexDirection: 'row',
+                    padding: 4,
+                }}>
+                <Image
+                    source={{uri: `${config.IMAGE_URL}${image}`}}
+                    style={styles.image}
+                />
+                <Text
+                    numberOfLines={4}
+                    ellipsizeMode="tail"
+                    style={{flexShrink: 1, marginLeft: 8, fontFamily: 'Abel-Regular'}}>
+                    {description}
+                </Text>
+            </View>
             </Card>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
+        </TouchableOpacity>
     );
-  };
 
-  return (
-    <>
-      <CustomHeader headerTitle="Epaper" />
-      <ScrollView >
-        {dataNews?.length > 0 && renderNewsByCategory()}
-      </ScrollView>
-    </>
-  );
-};
+    return (
+        <>
+        <CustomHeader headerTitle="Epaper" />
+            {/* <View>
+                <Text>Epaper</Text>
+            </View> */}
 
-const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    // padding: 8,
-  },
-  categoryButton: {
-    padding: 5,
-    height:30,
-    marginRight: 10,
-    borderWidth: 1,
-    borderColor: 'green',
-    borderRadius: 5,
-  },
-  selectedCategoryButton: {
-    backgroundColor: 'green',
-  },
-  categoryText: {
-    fontSize: 16,
-    color: 'green',
-    fontFamily: 'Abel-Regular',
-  },
-  categoryTextActive: {
-    fontSize: 16,
-    color: 'white',
-    fontFamily: 'Abel-Regular',
-  },
-  newsContainer: {
-  },
-  cardContainer: {
-    marginBottom: 16,
-  },
-  cardImage: {
-    height: 100,
-  },
-  cardDescription: {
-    marginTop: 8,
-  },
-});
+        <ScrollView contentContainerStyle={styles.container}>
+            {newsCategory.map((category, index) => (
+            <View key={index}>
+                <Text style={styles.categoryTitle}>{category.category}</Text>
+                {category.news.map(newsItem => (
+                <PeparCard
+                    key={newsItem.id}
+                    title={newsItem.post_title}
+                    description={newsItem.post_description}
+                    fullDescription={newsItem.post_body}
+                    image={newsItem.file_name}
+                />
+                ))}
+            </View>
+            ))}
+        </ScrollView>
 
-export default Epaper;
+        </>
+
+    )
+}
+
+export default Epaper

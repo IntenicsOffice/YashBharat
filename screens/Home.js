@@ -4,7 +4,7 @@ import {Card, Text, Image} from 'react-native-elements';
 import CustomHeader from '../navigation/CustomHeader';
 import {useNavigation} from '@react-navigation/native';
 import config from '../config';
-import {getNewsByCategory, getNewsCategory} from '../controller/NewsController';
+import {getNewsByCategory, getNewsCategory} from '../controllers/NewsController';
 
 const Home = () => {
   const [newsCategory, setNewsCategory] = useState([]);
@@ -147,7 +147,7 @@ const Home = () => {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{marginTop: 8, marginLeft: 12, height: 40}}>
+        style={{marginTop:10, marginLeft: 10, height: 40}}>
         {newsCategories?.map((category, index) => (
           <TouchableOpacity
             key={index}
@@ -157,8 +157,9 @@ const Home = () => {
             ]}
             onPress={() => {
               setSelectedCategory(index);
-              navigation.navigate('Epaper', {
+              navigation.navigate('CategoryNews', {
                 categoryId: category.category_id,
+                category:category.category
               });
             }}>
             <Text
@@ -233,6 +234,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'green',
     fontFamily: 'Abel-Regular',
+    // marginTop:-5,
   },
   categoryTextActive: {
     fontSize: 16,
@@ -240,7 +242,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Abel-Regular',
   },
   categoryButton: {
-    padding: 5,
+    paddingTop:3,
+    paddingHorizontal:5,
     height: 30,
     marginRight: 10,
     borderWidth: 1,
